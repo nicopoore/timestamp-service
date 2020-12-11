@@ -14,19 +14,34 @@ app.use(cors({optionsSuccessStatus: 200}));  // some legacy browsers choke on 20
 app.use(express.static('public'));
 
 // http://expressjs.com/en/starter/basic-routing.html
-app.get("/", function (req, res) {
+app.get("/", (req, res) => {
   res.sendFile(__dirname + '/views/index.html');
 });
 
 
 // your first API endpoint... 
-app.get("/api/hello", function (req, res) {
+app.get("/api/hello", (req, res) => {
   res.json({greeting: 'hello API'});
 });
 
-
+app.get("/api/timestamp/:timestamp", (req, res) => {
+  const { timestamp } = req.params;
+  let utcDate
+  let unix
+  if (timestamp.match(/\d{4}-\d{1,2}-\d{1,2}/)) {
+    utcDate = new Date(timestamp).toUTCString()
+    unix = Date.parse(timestamp) / 1000
+  } else if (timestamp.match(/\d{10}/)) {
+    unix = timestamp
+    utcDate = new Date(timestamp*1000).toUTCString()
+  }
+  res.json({
+    unix: unix,
+    utc: utcDate
+  })
+})
 
 // listen for requests :)
-var listener = app.listen(process.env.PORT, function () {
+var listener = app.listen(process.env.PORT, () => {
   console.log('Your app is listening on port ' + listener.address().port);
 });
