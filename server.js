@@ -27,7 +27,7 @@ app.get("/api/hello", (req, res) => {
 // timestamp logic
 app.get("/api/timestamp", (req, res) => {
   res.json({
-    unix: new Date(),
+    unix: Date.parse(new Date()),
     utc: new Date().toUTCString()
   })
 })
