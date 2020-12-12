@@ -24,7 +24,7 @@ app.get("/api/hello", (req, res) => {
   res.json({greeting: 'hello API'});
 });
 
-// timestamp logic
+// timestamp endpoint logic
 app.get("/api/timestamp", (req, res) => {
   res.json({
     unix: parseInt(Date.parse(new Date())),
