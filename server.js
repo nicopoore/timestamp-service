@@ -24,21 +24,36 @@ app.get("/api/hello", (req, res) => {
   res.json({greeting: 'hello API'});
 });
 
+// timestamp logic
+app.get("/api/timestamp", (req, res) => {
+  res.json({
+    unix: new Date(),
+    utc: new Date().toUTCString()
+  })
+})
+
 app.get("/api/timestamp/:timestamp", (req, res) => {
   const { timestamp } = req.params;
   let utcDate
   let unix
-  if (timestamp.match(/\d{4}-\d{1,2}-\d{1,2}/)) {
-    utcDate = new Date(timestamp).toUTCString()
-    unix = Date.parse(timestamp) / 1000
-  } else if (timestamp.match(/\d{10}/)) {
+  if (timestamp.match(/\d{10}/)) {
     unix = timestamp
-    utcDate = new Date(timestamp*1000).toUTCString()
+    utcDate = new Date(timestamp/1).toUTCString()
+  } else {
+    utcDate = new Date(timestamp).toUTCString()
+    unix = Date.parse(timestamp)
   }
-  res.json({
-    unix: unix,
-    utc: utcDate
-  })
+
+  if (unix === null || utcDate === "Invalid Date") {
+    res.json({
+      error: "Invalid Date"
+    })
+  } else {
+    res.json({
+      unix: unix,
+      utc: utcDate
+    })
+  }
 })
 
 // listen for requests :)
