@@ -37,11 +37,11 @@ app.get("/api/timestamp/:timestamp", (req, res) => {
   let utcDate
   let unix
   if (timestamp.match(/\d{10}/)) {
-    unix = timestamp
+    unix = parseInt(timestamp)
     utcDate = new Date(timestamp/1).toUTCString()
   } else {
     utcDate = new Date(timestamp).toUTCString()
-    unix = Date.parse(timestamp)
+    unix = parseInt(Date.parse(timestamp))
   }
 
   if (unix === null || utcDate === "Invalid Date") {
